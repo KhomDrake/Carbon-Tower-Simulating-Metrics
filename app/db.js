@@ -43,15 +43,25 @@ module.exports.Machine = {
         return SQLQuery("select * from T_MACHINE");
     },
     insertMeasurent: (measurement) => {
-        return SQLQuery(`insert into T_MACHINE_METRIC values(${measurement.useRam}, 
-            ${measurement.tempGPU}, 
-            ${measurement.useGPU}, 
-            ${measurement.useDisc}, 
-            ${measurement.rpmCooler}, 
-            ${measurement.tempCPU}, 
-            'asd',
-            ${measurement.idMachine}, 
-            '${measurement.metricDate}', 
-            '${measurement.metricTime}')`);
+        console.log(`insert into T_MACHINE_METRIC values(${measurement.useRam}, ${measurement.tempGPU}, ${measurement.useGPU}, ${measurement.useDisc}, ${measurement.rpmCooler}, ${measurement.tempCPU}, 'asd', ${measurement.idMachine}, '${measurement.metricDate}', '${measurement.metricTime}')`)
+        // return SQLQuery(`insert into T_MACHINE_METRIC values(${measurement.useRam}, 
+        //     ${measurement.tempGPU}, 
+        //     ${measurement.useGPU}, 
+        //     ${measurement.useDisc}, 
+        //     ${measurement.rpmCooler}, 
+        //     ${measurement.tempCPU}, 
+        //     'asd',
+        //     ${measurement.idMachine}, 
+        //     '${measurement.metricDate}', 
+        //     '${measurement.metricTime}')`);
+    },
+    getAllTimeInChampionship: () => {
+        return SQLQuery("select * from T_TEAM_IN_CHAMPIONSHIP");
+    },
+    getAllTimes: () => {
+        return SQLQuery("select * from T_TEAM");
+    },
+    getAllPlayers: () => {
+        return SQLQuery("select * from T_USER_ROLE where idRole_fk = 3");
     }
 }

@@ -1,5 +1,3 @@
-const express = require('express');
-const router = express.Router();
 let arduinoId = [];
 const db = require('./db').Machine;
 
@@ -34,30 +32,81 @@ let oct = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,
 let nov = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,30];
 let dec = [1,2,3,4,5,6,7,8,9,10,11,12];
 
-db.getAllMachines()
-    .then(machines => {
-        let machinesId = []
-        for (let i = 0; i < machines.length; i++) {
-            machinesId.push(machines[i].idMachine);
-        }
-        setInterval(() => {
-            let inserts = [];
-            addMeasurement(inserts, jan, machinesId);
-            addMeasurement(inserts, feb, machinesId);
-            addMeasurement(inserts, mar, machinesId);
-            addMeasurement(inserts, aph, machinesId);
-            addMeasurement(inserts, may, machinesId);
-            addMeasurement(inserts, jun, machinesId);
-            addMeasurement(inserts, jul, machinesId);
-            Promise.all(inserts)
-                        .then((results) => {
-                            console.log("Worked");
-                        })
-                        .catch(err => console.log(err));
-        }, 60000);
+let idMatch = 1;
+
+let times = []
+
+db.getAllTimes()
+    .then(resultado => {
+        times = resultado;
+        return db.getAllPlayers()
+    })
+    .then(players => {
+        let quantidade = parseInt(players.length/times.length);
+        let playerId = 1;
+        times.forEach(time => {
+            if(playerId > players[players.length - 1].idUserRole) return;
+
+            for (let i = 0; i < quantidade; i++) {
+                console.log(`insert into T_PLAYER_IN_TEAM values(${players[playerId + i].idUserRole}, ${time.idTeam});`);                
+            }
+            playerId += quantidade;
+        });
+        console.log(players.length);
     })
 
-function addMeasurement(insert, month, ids) {
+
+// db.getAllTimeInChampionship()
+//     .then(resultado => {
+//         for (let i = 0; i < resultado.length; i+= 2) {
+//             showMatchs(resultado[i], resultado[i + 1])
+//         }
+//         console.log(idMatch)
+//         // console.log(resultado);
+//     });
+
+// function showMatchs(timeInChampionshipOne, timeInChampionshipTwo) {
+//     let date = new Date();
+//     let da = date.toString().split(' ');
+//     let meses = [jan, feb, mar, aph, may, jun, jul];
+//     let mesesNumber = [1, 2, 3, 4, 5, 6, 7]
+//     let winner = false;
+//     for (let i = 0; i < meses.length; i++) {
+//         let day = parseInt(Math.random() * (meses[i].length - 1))
+//         leituraData = `${da[3]}/${mesesNumber[i]}/${meses[i][day]}`;
+//         leituraHora = `${da[4]}`;
+//         console.log(`insert into T_MATCH values('${leituraData}', '${leituraHora}', ${timeInChampionshipOne.idChampionship_fk}, ${winner ? timeInChampionshipOne.idTeam_fk : timeInChampionshipTwo.idTeam_fk})`)
+//         console.log(`insert into T_TEAM_IN_MATCH values(${timeInChampionshipOne.idTeam_fk}, ${idMatch})`);
+//         console.log(`insert into T_TEAM_IN_MATCH values(${timeInChampionshipTwo.idTeam_fk}, ${idMatch})`);
+//         winner = !winner;
+//         idMatch++;
+//     }
+// }
+
+// db.getAllMachines()
+//     .then(machines => {
+//         let machinesId = []
+//         for (let i = 0; i < machines.length; i++) {
+//             machinesId.push(machines[i].idMachine);
+//         }
+//         setInterval(() => {
+//             let inserts = [];
+//             addMeasurement(inserts, jan, machinesId, 1);
+//             addMeasurement(inserts, feb, machinesId, 2);
+//             addMeasurement(inserts, mar, machinesId, 3);
+//             addMeasurement(inserts, aph, machinesId, 4);
+//             addMeasurement(inserts, may, machinesId, 5);
+//             addMeasurement(inserts, jun, machinesId, 6);
+//             addMeasurement(inserts, jul, machinesId, 7);
+//             Promise.all(inserts)
+//                         .then((results) => {
+//                             console.log("");
+//                         })
+//                         .catch(err => console.log(err));
+//         }, 2000);
+//     })
+
+function addMeasurement(insert, month, ids, m) {
     let date = new Date();
     let da = date.toString().split(' ');
     leituraHora = `${da[4]}`;
@@ -79,7 +128,7 @@ function addMeasurement(insert, month, ids) {
             let useDisc = 50.0 + variacao;
             variacao = (Math.random() > 0.5 ? -1 : 1) * (Math.random() * 40);
             let rpmCooler = 50.0 + variacao;
-            leituraData = `${da[3]}/${1}/${month[j]}`;
+            leituraData = `${da[3]}/${m}/${month[j]}`;
 
             insert.push(db.insertMeasurent({
                 useRam: useRam.toFixed(2),
@@ -96,8 +145,3 @@ function addMeasurement(insert, month, ids) {
     }
 }
 
-router.get('/', (request, response, next) => {
-    res.json({a: "asdsa"})
-});
-
-module.exports = router;
