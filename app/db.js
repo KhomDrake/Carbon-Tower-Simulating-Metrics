@@ -63,5 +63,18 @@ module.exports.Machine = {
     },
     getAllPlayers: () => {
         return SQLQuery("select * from T_USER_ROLE where idRole_fk = 3");
+    },
+    getAllChampionship: () => {
+        return SQLQuery("select * from T_CHAMPIONSHIP;");
+    },
+    getAllEmrpesas: () => {
+        return SQLQuery("select * from T_USER_ROLE where T_USER_ROLE.idRole_fk = 1;");
+    },
+    getAllStreams: (idUserRole) => {
+        return SQLQuery(`select * from T_USER_STREAM, T_STREAM where T_USER_STREAM.idUserRole_fk = ${idUserRole}
+        and T_STREAM.idUserStream_fk = T_USER_STREAM.idUserStream`)
+    },
+    getAllChampionship: (idUserRole) => {
+        return SQLQuery(`select * from T_CHAMPIONSHIP where T_CHAMPIONSHIP.owner_fk = ${idUserRole}`);
     }
 }

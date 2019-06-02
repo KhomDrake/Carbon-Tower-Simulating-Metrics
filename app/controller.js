@@ -36,24 +36,68 @@ let idMatch = 1;
 
 let times = []
 
-db.getAllTimes()
-    .then(resultado => {
-        times = resultado;
-        return db.getAllPlayers()
-    })
-    .then(players => {
-        let quantidade = parseInt(players.length/times.length);
-        let playerId = 1;
-        times.forEach(time => {
-            if(playerId > players[players.length - 1].idUserRole) return;
+let players = []
 
-            for (let i = 0; i < quantidade; i++) {
-                console.log(`insert into T_PLAYER_IN_TEAM values(${players[playerId + i].idUserRole}, ${time.idTeam});`);                
-            }
-            playerId += quantidade;
-        });
-        console.log(players.length);
+let empresas = [];
+
+db.getAllEmrpesas()
+    .then(empresasDb => {
+        empresas = empresasDb;
+        // console.log(empresas);
+        for (let i = 0; i < empresas.length; i++) {
+            let streams = [];
+            db.getAllStreams(empresas[i].idUserRole)
+                .then(streamsDb => {
+                    // console.log(streamsDb);
+                    streams = streamsDb;
+                    return db.getAllChampionship(empresas[i].idUserRole)
+                })
+                .then(championshipsDb => {
+                    // console.log(championshipsDb);
+                    for (let j = 0; j < streams.length; j++) {
+                        if(j < championshipsDb.length) {
+                            console.log(`insert into T_STREAM_OF_CHAMPION values (${championshipsDb[j].idChampionship},'${streams[j].idStream}');`);
+                        }
+                    }
+                })
+            
+        }
     })
+
+// db.getAllPlayers()
+//     .then(resultado => {
+//         players = resultado;
+//         return db.getAllChampionship();
+//     })
+//     .then(championships => {
+//         let idChampionship = 0;
+//         for (let i = 0; i < players.length; i+= 10) {
+//             console.log(`insert into T_ADMINISTRATOR_CHAMPIONSHIP values (${players[i].idUserRole}, ${championships[idChampionship].idChampionship})`)
+//             idChampionship++;
+//             if(idChampionship == championships.length)
+//                 idChampionship = 0;            
+//         }
+//     })
+//     .catch(err => console.log(err));
+
+// db.getAllTimes()
+//     .then(resultado => {
+//         times = resultado;
+//         return db.getAllPlayers()
+//     })
+//     .then(players => {
+//         let quantidade = parseInt(players.length/times.length);
+//         let playerId = 1;
+//         times.forEach(time => {
+//             if(playerId > players[players.length - 1].idUserRole) return;
+
+//             for (let i = 0; i < quantidade; i++) {
+//                 console.log(`insert into T_PLAYER_IN_TEAM values(${players[playerId + i].idUserRole}, ${time.idTeam});`);                
+//             }
+//             playerId += quantidade;
+//         });
+//         console.log(players.length);
+//     })
 
 
 // db.getAllTimeInChampionship()
