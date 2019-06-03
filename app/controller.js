@@ -40,29 +40,29 @@ let players = []
 
 let empresas = [];
 
-db.getAllEmrpesas()
-    .then(empresasDb => {
-        empresas = empresasDb;
-        // console.log(empresas);
-        for (let i = 0; i < empresas.length; i++) {
-            let streams = [];
-            db.getAllStreams(empresas[i].idUserRole)
-                .then(streamsDb => {
-                    // console.log(streamsDb);
-                    streams = streamsDb;
-                    return db.getAllChampionship(empresas[i].idUserRole)
-                })
-                .then(championshipsDb => {
-                    // console.log(championshipsDb);
-                    for (let j = 0; j < streams.length; j++) {
-                        if(j < championshipsDb.length) {
-                            console.log(`insert into T_STREAM_OF_CHAMPION values (${championshipsDb[j].idChampionship},'${streams[j].idStream}');`);
-                        }
-                    }
-                })
+// db.getAllEmrpesas()
+//     .then(empresasDb => {
+//         empresas = empresasDb;
+//         // console.log(empresas);
+//         for (let i = 0; i < empresas.length; i++) {
+//             let streams = [];
+//             db.getAllStreams(empresas[i].idUserRole)
+//                 .then(streamsDb => {
+//                     // console.log(streamsDb);
+//                     streams = streamsDb;
+//                     return db.getAllChampionship(empresas[i].idUserRole)
+//                 })
+//                 .then(championshipsDb => {
+//                     // console.log(championshipsDb);
+//                     for (let j = 0; j < streams.length; j++) {
+//                         if(j < championshipsDb.length) {
+//                             console.log(`insert into T_STREAM_OF_CHAMPION values (${championshipsDb[j].idChampionship},'${streams[j].idStream}');`);
+//                         }
+//                     }
+//                 })
             
-        }
-    })
+//         }
+//     })
 
 // db.getAllPlayers()
 //     .then(resultado => {
@@ -127,28 +127,28 @@ db.getAllEmrpesas()
 //     }
 // }
 
-// db.getAllMachines()
-//     .then(machines => {
-//         let machinesId = []
-//         for (let i = 0; i < machines.length; i++) {
-//             machinesId.push(machines[i].idMachine);
-//         }
-//         setInterval(() => {
-//             let inserts = [];
-//             addMeasurement(inserts, jan, machinesId, 1);
-//             addMeasurement(inserts, feb, machinesId, 2);
-//             addMeasurement(inserts, mar, machinesId, 3);
-//             addMeasurement(inserts, aph, machinesId, 4);
-//             addMeasurement(inserts, may, machinesId, 5);
-//             addMeasurement(inserts, jun, machinesId, 6);
-//             addMeasurement(inserts, jul, machinesId, 7);
-//             Promise.all(inserts)
-//                         .then((results) => {
-//                             console.log("");
-//                         })
-//                         .catch(err => console.log(err));
-//         }, 2000);
-//     })
+db.getAllMachines()
+    .then(machines => {
+        let machinesId = []
+        for (let i = 0; i < machines.length; i++) {
+            machinesId.push(machines[i].idMachine);
+        }
+        setInterval(() => {
+            let inserts = [];
+            addMeasurement(inserts, jan, machinesId, 1);
+            addMeasurement(inserts, feb, machinesId, 2);
+            addMeasurement(inserts, mar, machinesId, 3);
+            addMeasurement(inserts, aph, machinesId, 4);
+            addMeasurement(inserts, may, machinesId, 5);
+            addMeasurement(inserts, jun, machinesId, 6);
+            addMeasurement(inserts, jul, machinesId, 7);
+            Promise.all(inserts)
+                        .then((results) => {
+                            console.log("");
+                        })
+                        .catch(err => console.log(err));
+        }, 2000);
+    })
 
 function addMeasurement(insert, month, ids, m) {
     let date = new Date();
@@ -169,6 +169,8 @@ function addMeasurement(insert, month, ids, m) {
             variacao = (Math.random() > 0.5 ? -1 : 1) * (Math.random() * 40);
             let useGPU = 50.0 + variacao;
             variacao = (Math.random() > 0.5 ? -1 : 1) * (Math.random() * 40);
+            let useCPU = 50.0 + variacao;
+            variacao = (Math.random() > 0.5 ? -1 : 1) * (Math.random() * 40);
             let useDisc = 50.0 + variacao;
             variacao = (Math.random() > 0.5 ? -1 : 1) * (Math.random() * 40);
             let rpmCooler = 50.0 + variacao;
@@ -179,6 +181,7 @@ function addMeasurement(insert, month, ids, m) {
                 tempCPU: tempCPU.toFixed(2),
                 tempGPU: tempGPU.toFixed(2),
                 useGPU: useGPU.toFixed(2),
+                useCPU: useCPU.toFixed(2),
                 useDisc: useDisc.toFixed(2),
                 rpmCooler: rpmCooler.toFixed(0),
                 metricDate: leituraData,

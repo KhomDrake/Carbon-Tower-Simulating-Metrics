@@ -43,7 +43,7 @@ module.exports.Machine = {
         return SQLQuery("select * from T_MACHINE");
     },
     insertMeasurent: (measurement) => {
-        console.log(`insert into T_MACHINE_METRIC values(${measurement.useRam}, ${measurement.tempGPU}, ${measurement.useGPU}, ${measurement.useDisc}, ${measurement.rpmCooler}, ${measurement.tempCPU}, 'asd', ${measurement.idMachine}, '${measurement.metricDate}', '${measurement.metricTime}')`)
+        console.log(`insert into T_MACHINE_METRIC values(${measurement.useRam}, ${measurement.tempGPU}, ${measurement.useGPU}, ${measurement.useDisc}, ${measurement.useCPU}, ${measurement.rpmCooler}, ${measurement.tempCPU}, 'asd', '${measurement.idMachine}', '${measurement.metricDate}', '${measurement.metricTime}')`)
         // return SQLQuery(`insert into T_MACHINE_METRIC values(${measurement.useRam}, 
         //     ${measurement.tempGPU}, 
         //     ${measurement.useGPU}, 
